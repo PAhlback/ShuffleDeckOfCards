@@ -8,7 +8,7 @@ namespace ShuffleDeckOfCards
 {
     internal class DeckOfCards
     {
-        public List<Card> Cards { get; set; }
+        public List<Card> Deck { get; set; }
         public DeckOfCards() 
         {
             
