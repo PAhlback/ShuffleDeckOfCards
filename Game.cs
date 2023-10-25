@@ -26,7 +26,7 @@ namespace ShuffleDeckOfCards
             char choice = 'x';
             Thread.Sleep(500);
 
-            while (y <= 21)
+            while (y < 21)
             {
                 Console.WriteLine($"You have {y}. Hit again?");
                 Console.WriteLine("y/n: ");

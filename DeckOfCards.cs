@@ -13,28 +13,41 @@ namespace ShuffleDeckOfCards
         public DeckOfCards() 
         {
             string name = string.Empty;
+            int j = 2;
             for (int i = 2; i <= 14; i++)
             {
+                if (i > 10 && i <= 13) { j = 10; }
+                else if (i == 14) { j = 11; }
+                else { j = i; }
                 name = Card.GetName(i);
-                Card c = new Card("Hearts", i, name);
+                Card c = new Card("Hearts", j, name);
                 Deck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
+                if (i > 10 && i <= 13) { j = 10; }
+                else if (i == 14) { j = 11; }
+                else { j = i; }
                 name = Card.GetName(i);
-                Card c = new Card("Diamonds", i, name);
+                Card c = new Card("Diamonds", j, name);
                 Deck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
+                if (i > 10 && i <= 13) { j = 10; }
+                else if (i == 14) { j = 11; }
+                else { j = i; }
                 name = Card.GetName(i);
-                Card c = new Card("Spades", i, name);
+                Card c = new Card("Spades", j, name);
                 Deck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
+                if (i > 10 && i <= 13) { j = 10; }
+                else if (i == 14) { j = 11; }
+                else { j = i; }
                 name = Card.GetName(i);
-                Card c = new Card("Clubs", i, name);
+                Card c = new Card("Clubs", j, name);
                 Deck.Add(c);
             }
         }
