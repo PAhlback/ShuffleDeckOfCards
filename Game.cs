@@ -34,10 +34,11 @@ namespace ShuffleDeckOfCards
                 Console.WriteLine($"Computer has {cpuTotal}");
                 Console.WriteLine("Hit again?");
                 Console.Write("y/n: ");
-                choice = char.Parse(Console.ReadLine());
+                choice = char.Parse(Console.ReadLine().ToLower());
                 Console.WriteLine();
                 if (choice == 'y')
                 {
+                    Console.Write("You draw: ");
                     playerTotal += DeckOfCards.DrawCard(cardStack);
                     if (playerTotal > 21)
                     {
@@ -46,21 +47,42 @@ namespace ShuffleDeckOfCards
                         break;
                     }
                 }
-                else if (choice == 'n')
+                if (playerTotal > cpuTotal)
+                {
+                    Thread.Sleep(500);
+                    Console.Write("Computer draws card: ");
+                    cpuTotal += DeckOfCards.DrawCard(cardStack);
+                    Thread.Sleep(500);
+                }
+                if (cpuTotal > 21)
+                {
+                    Console.WriteLine("Computers total is over 21. You WIN by default!");
+                    FinalScores(playerTotal, cpuTotal);
+                    Thread.Sleep(500);
+                    break;
+                }
+                if (choice == 'n' && cpuTotal < 22)
                 {
                     if (playerTotal > cpuTotal && playerTotal <= 21)
                     {
-                        Console.WriteLine($"You WON!");
+                        Console.WriteLine("You WON!");
                         FinalScores(playerTotal, cpuTotal);
                         break;
                     }
                     else if (playerTotal < cpuTotal)
                     {
-                        Console.WriteLine($"You LOST. Better luck next time!");
+                        Console.WriteLine("You LOST. Better luck next time!");
                         FinalScores(playerTotal, cpuTotal);
+                        break;
+                    }
+                    else if (playerTotal == cpuTotal)
+                    {
+                        Console.WriteLine("DRAW! Computer wins ;)");
+                        FinalScores(playerTotal, cpuTotal);
+                        break;
                     }
                 }
-                else if (choice != 'y' || choice != 'n')
+                if (choice != 'y' && choice != 'n')
                 {
                     Console.WriteLine("Only enter y or n");
                     Thread.Sleep(1200);
