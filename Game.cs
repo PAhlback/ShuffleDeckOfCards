@@ -16,42 +16,48 @@ namespace ShuffleDeckOfCards
             Console.ReadKey();
             Console.WriteLine();
 
-            Console.WriteLine("Pulling first cards...");
+            Console.WriteLine("Pulling your first cards...");
             Thread.Sleep(500);
-            Console.WriteLine($"{cardStack.Peek().Name} of {cardStack.Peek().Color}");
-            int y = cardStack.Pop().Number;
-            Thread.Sleep(500);
-            Console.WriteLine($"{cardStack.Peek().Name} of {cardStack.Peek().Color}");
-            y += cardStack.Pop().Number;
-            char choice = 'x';
-            Thread.Sleep(500);
+            int playerTotal = DeckOfCards.DrawCard(cardStack);
+            playerTotal += DeckOfCards.DrawCard(cardStack);
 
-            while (y < 21)
+            Console.WriteLine("Pulling computers first cards...");
+            Thread.Sleep(500);
+            int cpuTotal = DeckOfCards.DrawCard(cardStack);
+            cpuTotal += DeckOfCards.DrawCard(cardStack);
+
+            char choice = 'x';
+            while (playerTotal <= 21)
             {
-                Console.WriteLine($"You have {y}. Hit again?");
-                Console.WriteLine("y/n: ");
+                Console.WriteLine();
+                Console.WriteLine($"You have {playerTotal}");
+                Console.WriteLine($"Computer has {cpuTotal}");
+                Console.WriteLine("Hit again?");
+                Console.Write("y/n: ");
                 choice = char.Parse(Console.ReadLine());
+                Console.WriteLine();
                 if (choice == 'y')
                 {
-                    Console.WriteLine($"{cardStack.Peek().Name} of {cardStack.Peek().Color}");
-                    y += cardStack.Pop().Number;
-                    if (y > 21)
+                    playerTotal += DeckOfCards.DrawCard(cardStack);
+                    if (playerTotal > 21)
                     {
-                        Console.WriteLine($"Dang, you lost! You got {y}.");
+                        Console.WriteLine($"Dang, you LOST! ");
+                        FinalScores(playerTotal, cpuTotal);
                         break;
                     }
                 }
                 else if (choice == 'n')
                 {
-                    if (y > 18)
+                    if (playerTotal > cpuTotal && playerTotal <= 21)
                     {
-                        Console.WriteLine($"You got {y}. Close!");
+                        Console.WriteLine($"You WON!");
+                        FinalScores(playerTotal, cpuTotal);
                         break;
                     }
-                    else
+                    else if (playerTotal < cpuTotal)
                     {
-                        Console.WriteLine("Could have gone better, right?");
-                        break;
+                        Console.WriteLine($"You LOST. Better luck next time!");
+                        FinalScores(playerTotal, cpuTotal);
                     }
                 }
                 else if (choice != 'y' || choice != 'n')
@@ -60,11 +66,13 @@ namespace ShuffleDeckOfCards
                     Thread.Sleep(1200);
                     Console.Clear();
                 }
-                if (y == 21)
-                {
-                    Console.WriteLine("You got 21! Congratulations!");
-                }
             }
+        }
+
+        public static void FinalScores(int playerTotal, int cpuTotal)
+        {
+            Console.WriteLine($"You final score was: {playerTotal}.");
+            Console.WriteLine($"Computers final score was: {cpuTotal}.");
         }
     }
 }

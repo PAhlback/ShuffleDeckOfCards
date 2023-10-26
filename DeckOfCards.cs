@@ -51,5 +51,12 @@ namespace ShuffleDeckOfCards
                 Deck.Add(c);
             }
         }
+
+        public static int DrawCard(Stack<Card> cardStack)
+        {
+            Console.WriteLine($"{cardStack.Peek().Name} of {cardStack.Peek().Color}");
+            Thread.Sleep(500);
+            return cardStack.Pop().Number;
+        }
     }
 }

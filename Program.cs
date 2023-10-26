@@ -10,6 +10,16 @@
             {
                 //Creates a list of cards within the DeckOfCards class called
                 DeckOfCards cardDeck = new DeckOfCards();
+
+                ////----------------------------
+                //// Code for testing
+                //foreach(Card card in cardDeck.Deck)
+                //{
+                //    Console.WriteLine($"{card.Name} {card.Color} {card.Number}");
+                //}
+                //Console.ReadLine();
+                ////----------------------------
+
                 // Shuffles the deck of cards
                 Shuffle.ShuffleMethod(cardDeck.Deck);
 
