@@ -11,6 +11,8 @@ namespace ShuffleDeckOfCards
     {
         public static void PlayGame(Stack<Card> cardStack)
         {
+            //Add choosing profile here, check wins and losses, create profile, delete profile
+
             bool winCheck = false;
 
             Player player = new Player();
@@ -74,6 +76,8 @@ namespace ShuffleDeckOfCards
                     Console.Clear();
                 }
             }
+
+            //Add code to store wins, losses and draws.
         }
 
         public static bool CpusTurn(Player cpu, Player player, Stack<Card> cardStack)
