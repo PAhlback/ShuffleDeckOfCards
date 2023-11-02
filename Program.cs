@@ -34,23 +34,32 @@
                 Game.PlayGame(cardStack);
 
                 // Checks if the player wants to play again.
-                Console.WriteLine();
-                Console.WriteLine("Want to play again? (y/n)");
-                string yesNo = Console.ReadLine().ToLower();
-                if(yesNo == "y")
+                while (true)
                 {
-                    Console.WriteLine("Loading, please wait...");
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                }
-                else if (yesNo == "n")
-                {
-                    Console.WriteLine("Thanks for playing!");
-                    Thread.Sleep(1000);
-                    break;
+                    Console.WriteLine();
+                    Console.WriteLine("Want to play again? (y/n)");
+                    string yesNo = Console.ReadLine().ToLower();
+                    if (yesNo == "y")
+                    {
+                        Console.WriteLine("Loading, please wait...");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        break;
+                    }
+                    else if (yesNo == "n")
+                    {
+                        Console.WriteLine("Thanks for playing!");
+                        Thread.Sleep(1000);
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Only enter y/n");
+                        Console.WriteLine("Please wait...");
+                        Thread.Sleep(250);
+                    }
                 }
             }
-            Environment.Exit(0);
         }
     } 
 }

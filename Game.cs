@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,83 +24,92 @@ namespace ShuffleDeckOfCards
             Console.WriteLine("Pulling your first cards...");
             Thread.Sleep(500);
             DeckOfCards.DrawCard(cardStack, player);
+            player.PrintLastCard();
             DeckOfCards.DrawCard(cardStack, player);
+            player.PrintLastCard();
 
             Console.WriteLine("Pulling computers first cards...");
             Thread.Sleep(500);
             DeckOfCards.DrawCard(cardStack, cpu);
+            cpu.PrintLastCard();
+            int cpuFirstNumber = cpu.Total;
             DeckOfCards.DrawCard(cardStack, cpu);
+            cpu.CpuSecondCard = cpu.Hand.Peek();
+            Console.WriteLine("Computers second card is hidden");
 
             char choice = 'x';
             while (!winCheck)
             {
                 Console.WriteLine();
                 Console.WriteLine($"You have {player.Total}");
-                Console.WriteLine($"Computer has {cpu.Total}");
+                Console.WriteLine($"Computer has {cpuFirstNumber} + hidden hole card");
                 Console.WriteLine("Hit or stand?");
                 Console.Write("h/s: ");
                 choice = char.Parse(Console.ReadLine().ToLower());
                 Console.WriteLine();
                 if (choice == 'h')
                 {
-                    Console.Write("You draw: ");
+                    Console.Write("You draw ");
                     DeckOfCards.DrawCard(cardStack, player);
+                    player.PrintLastCard();
                     if (player.Total > 21)
                     {
-                        Console.WriteLine($"Dang, you LOST! ");
-                        winCheck = true;
-                        PrintFinalScores(player.Total, cpu.Total);
-                    }
-                }
-                if (player.Total > cpu.Total)
-                {
-                    Thread.Sleep(500);
-                    Console.Write("Computer draws card: ");
-                    DeckOfCards.DrawCard(cardStack, cpu);
-                    Thread.Sleep(500);
-                }
-                if (cpu.Total > 21)
-                {
-                    Console.WriteLine("Computers total is over 21. You WIN by default!");
-                    winCheck = true;
-                    PrintFinalScores(player.Total, cpu.Total);
-                    Thread.Sleep(500);
-                }
-                if (choice == 's' && cpu.Total < 22)
-                {
-                    if (player.Total == cpu.Total)
-                    {
                         Console.WriteLine();
-                        Console.WriteLine("DRAW! Computer wins ;)");
+                        Console.WriteLine($"Dang, you LOST!");
                         winCheck = true;
                         PrintFinalScores(player.Total, cpu.Total);
                     }
-                    else
-                    {
-                        while (cpu.Total < player.Total && cpu.Total < 22)
-                        {
-                            Console.Write("Computer draws card: ");
-                            DeckOfCards.DrawCard(cardStack, cpu);
-                            if (player.Total > cpu.Total && player.Total <= 21)
-                            {
-                                Console.WriteLine("You WON!");
-                                winCheck = true;
-                                PrintFinalScores(player.Total, cpu.Total);
-                            }
-                            else if (player.Total < cpu.Total)
-                            {
-                                Console.WriteLine("You LOST. Better luck next time!");
-                                winCheck = true;
-                                PrintFinalScores(player.Total, cpu.Total);
-                            }
-                        }
-                    }
                 }
+                else if(choice == 's')
+                {
+                    Console.WriteLine("Computers turn!");
+                    winCheck = CpusTurn(cpu, player, cardStack);
+                    Thread.Sleep(800);
+                }
+
                 if (choice != 'h' && choice != 's')
                 {
                     Console.WriteLine("Only enter h or s");
                     Thread.Sleep(1200);
                     Console.Clear();
+                }
+            }
+        }
+
+        public static bool CpusTurn(Player cpu, Player player, Stack<Card> cardStack)
+        {
+            Console.WriteLine($"Computers hole card is {cpu.CpuSecondCard.Name} of {cpu.CpuSecondCard.Color}");
+
+            while (true)
+            {
+                Console.WriteLine($"Computer has {cpu.Total}");
+                Console.WriteLine();
+                Console.WriteLine("Press any key to continue");
+                Console.ReadLine();
+                Thread.Sleep(500);
+                if (cpu.Total > player.Total && cpu.Total < 22)
+                {
+                    Console.WriteLine("You LOST. Better luck next time!");
+                    PrintFinalScores(player.Total, cpu.Total);
+                    return true;
+                }
+                else if (cpu.Total == player.Total)
+                {
+                    Console.WriteLine("DRAW! Computer wins ;)");
+                    PrintFinalScores(player.Total, cpu.Total);
+                    return true;
+                }
+                else if (cpu.Total > 21)
+                {
+                    Console.WriteLine("You win! Computer went bust.");
+                    PrintFinalScores(player.Total, cpu.Total);
+                    return true;
+                }
+                else if (cpu.Total < player.Total)
+                {
+                    Console.Write("Computer draws ");
+                    DeckOfCards.DrawCard(cardStack, cpu);
+                    cpu.PrintLastCard();
                 }
             }
         }
