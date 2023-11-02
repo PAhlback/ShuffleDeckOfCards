@@ -4,11 +4,11 @@
     {
         static void Main(string[] args)
         {
-            // Everything is contained in this while loop, since this makes it really easy to check if the player wants to play
-            // again, or quit. Also generates a new deck of card for each game.
+            // Everything is contained in this while loop, since this makes it easy to check if the player wants to play
+            // again, or quit. Also generates a new deck of cards for each game.
             while (true)
             {
-                //Creates a list of cards within the DeckOfCards class called
+                //Creates a list of cards within the DeckOfCards class called cardDeck
                 DeckOfCards cardDeck = new DeckOfCards();
 
                 ////----------------------------

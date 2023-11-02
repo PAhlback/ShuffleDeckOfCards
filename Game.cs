@@ -49,7 +49,6 @@ namespace ShuffleDeckOfCards
                         Console.WriteLine($"Dang, you LOST! ");
                         winCheck = true;
                         PrintFinalScores(player.Total, cpu.Total);
-                        break;
                     }
                 }
                 if (player.Total > cpu.Total)
@@ -65,7 +64,6 @@ namespace ShuffleDeckOfCards
                     winCheck = true;
                     PrintFinalScores(player.Total, cpu.Total);
                     Thread.Sleep(500);
-                    break;
                 }
                 if (choice == 's' && cpu.Total < 22)
                 {
@@ -75,7 +73,6 @@ namespace ShuffleDeckOfCards
                         Console.WriteLine("DRAW! Computer wins ;)");
                         winCheck = true;
                         PrintFinalScores(player.Total, cpu.Total);
-                        break;
                     }
                     else
                     {
@@ -88,14 +85,12 @@ namespace ShuffleDeckOfCards
                                 Console.WriteLine("You WON!");
                                 winCheck = true;
                                 PrintFinalScores(player.Total, cpu.Total);
-                                break;
                             }
                             else if (player.Total < cpu.Total)
                             {
                                 Console.WriteLine("You LOST. Better luck next time!");
                                 winCheck = true;
                                 PrintFinalScores(player.Total, cpu.Total);
-                                break;
                             }
                         }
                     }
