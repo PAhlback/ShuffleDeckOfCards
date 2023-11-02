@@ -52,11 +52,18 @@ namespace ShuffleDeckOfCards
             }
         }
 
-        public static int DrawCard(Stack<Card> cardStack)
+        public static void DrawCard(Stack<Card> cardStack, Player p)
         {
             Console.WriteLine($"{cardStack.Peek().Name} of {cardStack.Peek().Color}");
+            if (cardStack.Peek().Name == "Ace") { p.AceDrawn = true; }
+            p.Hand.Add(cardStack.Peek());
+            p.Total += cardStack.Pop().Number;
+            if(p.Total > 21 && p.AceDrawn)
+            {
+                p.Total = p.Total - 10;
+                p.AceDrawn = false;
+            }
             Thread.Sleep(500);
-            return cardStack.Pop().Number;
         }
     }
 }
