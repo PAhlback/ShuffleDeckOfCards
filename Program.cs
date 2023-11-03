@@ -1,62 +1,139 @@
-﻿namespace ShuffleDeckOfCards
+﻿using ShuffleDeckOfCards.Data;
+using ShuffleDeckOfCards.Models;
+using System.Security.Cryptography.X509Certificates;
+
+namespace ShuffleDeckOfCards
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            // Everything is contained in this while loop, since this makes it easy to check if the player wants to play
-            // again, or quit. Also generates a new deck of cards for each game.
-            while (true)
+            //Select User profile or create a new one
+            using (UserContext context = new UserContext())
             {
-                //Creates a list of cards within the DeckOfCards class called cardDeck
-                DeckOfCards cardDeck = new DeckOfCards();
+                User user = UserMenu(context);
+                Console.WriteLine($"Hello, {user.Name}!");
+                Console.WriteLine("Please wait...");
+                Thread.Sleep(750);
+                Console.Clear();
 
-                ////----------------------------
-                //// Code for testing
-                //foreach(Card card in cardDeck.Deck)
-                //{
-                //    Console.WriteLine($"{card.Name} {card.Color} {card.Number}");
-                //}
-                //Console.ReadLine();
-                ////----------------------------
-
-                // Shuffles the deck of cards
-                Shuffle.ShuffleMethod(cardDeck.Deck);
-
-                // Moves the shuffled cards from the DeckOfCards list to a Stack.
-                Stack<Card> cardStack = new Stack<Card>();
-                for (int i = 0; i < cardDeck.Deck.Count(); i++)
-                {
-                    cardStack.Push(cardDeck.Deck[i]);
-                }
-
-                // Runs the game itself
-                Game.PlayGame(cardStack);
-
-                // Checks if the player wants to play again.
+                // Everything is contained in this while loop, since this makes it easy to check if the player wants to play
+                // again, or quit. Also generates a new deck of cards for each game.
                 while (true)
                 {
+                    //Creates a list of cards within the DeckOfCards class called cardDeck
+                    DeckOfCards cardDeck = new DeckOfCards();
+
+                    ////----------------------------
+                    //// Code for testing
+                    //foreach(Card card in cardDeck.Deck)
+                    //{
+                    //    Console.WriteLine($"{card.Name} {card.Color} {card.Number}");
+                    //}
+                    //Console.ReadLine();
+                    ////----------------------------
+
+                    // Shuffles the deck of cards
+                    Shuffle.ShuffleMethod(cardDeck.Deck);
+
+                    // Moves the shuffled cards from the DeckOfCards list to a Stack.
+                    Stack<Card> cardStack = new Stack<Card>();
+                    for (int i = 0; i < cardDeck.Deck.Count(); i++)
+                    {
+                        cardStack.Push(cardDeck.Deck[i]);
+                    }
+
+                    // Runs the game itself
+                    Game.PlayGame(cardStack, user);
+                    context.SaveChanges();
+
+                    // Checks if the player wants to play again.
+
                     Console.WriteLine();
-                    Console.WriteLine("Want to play again? (y/n)");
-                    string yesNo = Console.ReadLine().ToLower();
-                    if (yesNo == "y")
+
+                    user = EndMenu(user, context);
+
+                    Console.WriteLine("Loading, please wait...");
+                    Thread.Sleep(1000);
+                    Console.Clear();
+
+                }
+            }
+
+            static User UserMenu(UserContext context)
+            {
+                Console.Clear();
+                Console.WriteLine("Welcome to 21!");
+                Console.WriteLine("Please select profile");
+                List<User> users = context.Users.ToList();
+                for(int i = 1; i <= users.Count; i++)
+                {
+                    Console.WriteLine($"{i}. {users[i-1].Name}");
+                }
+                Console.WriteLine("c to create new user");
+                string input = Console.ReadLine().ToLower();
+
+                if(input == "c")
+                {
+                    Console.Write("Enter name: ");
+                    string name = Console.ReadLine();
+                    User user = new User()
                     {
-                        Console.WriteLine("Loading, please wait...");
-                        Thread.Sleep(1000);
-                        Console.Clear();
-                        break;
-                    }
-                    else if (yesNo == "n")
+                        Name = name
+                    };
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    return user;
+                }
+
+                int menuChoice = Convert.ToInt32(input) - 1;
+                return users[menuChoice];
+            }
+
+            static User EndMenu(User user, UserContext context)
+            {
+                while(true)
+                {
+                    Console.WriteLine("What do you want to do?");
+                    Console.WriteLine("1. Play again");
+                    Console.WriteLine("2. Check player stats");
+                    Console.WriteLine("3. Switch profile");
+                    Console.WriteLine("4. Quit");
+                    int check = int.Parse(Console.ReadLine());
+                    while (true)
                     {
-                        Console.WriteLine("Thanks for playing!");
-                        Thread.Sleep(1000);
-                        Environment.Exit(0);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Only enter y/n");
-                        Console.WriteLine("Please wait...");
-                        Thread.Sleep(250);
+                        if (check == 1)
+                        {
+                            return user;
+                        }
+                        else if (check == 2) 
+                        {
+                            Console.WriteLine($"{user.Name}");
+                            Console.WriteLine($"Wins: {user.Wins}");
+                            Console.WriteLine($"Losses: {user.Losses}");
+                            Console.WriteLine($"Draws: {user.Draws}");
+                            Console.WriteLine("Press enter to go back to menu");
+                            Console.ReadLine();
+                            Console.Clear();
+                            break;                           
+                        }
+                        else if (check == 3)
+                        {
+                            user = UserMenu(context);
+                            return user;
+                        }
+                        else if (check == 4)
+                        {
+                            Console.WriteLine("Thanks for playing!");
+                            Thread.Sleep(1000);
+                            Environment.Exit(0);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Only enter 1, 2, or 3");
+                            Console.WriteLine("Please wait...");
+                            Thread.Sleep(250);
+                        }
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShuffleDeckOfCards.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -9,17 +10,15 @@ namespace ShuffleDeckOfCards
 {
     internal class Game
     {
-        public static void PlayGame(Stack<Card> cardStack)
+        public static void PlayGame(Stack<Card> cardStack, User user)
         {
-            //Add choosing profile here, check wins and losses, create profile, delete profile
-
             bool winCheck = false;
 
             Player player = new Player();
             Player cpu = new Player();
-            Console.WriteLine("Welcome to 21!");
+            Console.WriteLine($"Welcome to 21, {user.Name}!");
             Console.WriteLine("Your goal is to get 21. Good Luck!");
-            Console.WriteLine("Press any key to continue");
+            Console.WriteLine("Press enter to continue");
             Console.ReadKey();
             Console.WriteLine();
 
@@ -58,6 +57,7 @@ namespace ShuffleDeckOfCards
                     {
                         Console.WriteLine();
                         Console.WriteLine($"Dang, you LOST!");
+                        user.Losses++;
                         winCheck = true;
                         PrintFinalScores(player.Total, cpu.Total);
                     }
@@ -65,7 +65,7 @@ namespace ShuffleDeckOfCards
                 else if(choice == 's')
                 {
                     Console.WriteLine("Computers turn!");
-                    winCheck = CpusTurn(cpu, player, cardStack);
+                    winCheck = CpusTurn(cpu, player, cardStack, user);
                     Thread.Sleep(800);
                 }
 
@@ -77,10 +77,11 @@ namespace ShuffleDeckOfCards
                 }
             }
 
-            //Add code to store wins, losses and draws.
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
         }
 
-        public static bool CpusTurn(Player cpu, Player player, Stack<Card> cardStack)
+        public static bool CpusTurn(Player cpu, Player player, Stack<Card> cardStack, User user)
         {
             Console.WriteLine($"Computers hole card is {cpu.CpuSecondCard.Name} of {cpu.CpuSecondCard.Color}");
 
@@ -88,25 +89,28 @@ namespace ShuffleDeckOfCards
             {
                 Console.WriteLine($"Computer has {cpu.Total}");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to continue");
+                Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
                 Thread.Sleep(500);
                 if (cpu.Total > player.Total && cpu.Total < 22)
                 {
                     Console.WriteLine("You LOST. Better luck next time!");
                     PrintFinalScores(player.Total, cpu.Total);
+                    user.Losses++;
                     return true;
                 }
                 else if (cpu.Total == player.Total)
                 {
                     Console.WriteLine("DRAW! Computer wins ;)");
                     PrintFinalScores(player.Total, cpu.Total);
+                    user.Draws++;
                     return true;
                 }
                 else if (cpu.Total > 21)
                 {
                     Console.WriteLine("You win! Computer went bust.");
                     PrintFinalScores(player.Total, cpu.Total);
+                    user.Wins++;
                     return true;
                 }
                 else if (cpu.Total < player.Total)
@@ -120,7 +124,7 @@ namespace ShuffleDeckOfCards
 
         public static void PrintFinalScores(int playerTotal, int cpuTotal)
         {
-            Console.WriteLine($"You final score was: {playerTotal}.");
+            Console.WriteLine($"Your final score was: {playerTotal}.");
             Console.WriteLine($"Computers final score was: {cpuTotal}.");
         }
     }
