@@ -11,44 +11,19 @@ namespace ShuffleDeckOfCards
             //Select User profile or create a new one
             using (UserContext context = new UserContext())
             {
-                User user = UserMenu(context);
+                User user = LogInMenu(context);
 
                 StartMenu(user);
                 
                 // Everything is contained in this while loop, since this makes it easy to check if the player wants to play
-                // again, or quit. Also generates a new deck of cards for each game.
+                // again, or quit.
                 while (true)
                 {
-                    //Creates a list of cards within the DeckOfCards class called cardDeck
-                    DeckOfCards cardDeck = new DeckOfCards();
-
-                    ////----------------------------
-                    //// Code for testing
-                    //foreach (Card card in cardDeck.Deck)
-                    //{
-                    //    Console.WriteLine($"{card.Name} {card.Color} {card.Number}");
-                    //}
-                    //Console.ReadLine();
-                    ////----------------------------
-
-                    // Shuffles the deck of cards
-                    Shuffle.ShuffleMethod(cardDeck.Deck);
-
-                    // Moves the shuffled cards from the DeckOfCards list to a Stack.
-                    Stack<Card> cardStack = new Stack<Card>();
-                    for (int i = 0; i < cardDeck.Deck.Count(); i++)
-                    {
-                        cardStack.Push(cardDeck.Deck[i]);
-                    }
-
                     // Runs the game itself
-                    Game.PlayGame(cardStack, user);
+                    Game.PlayGame(user);
                     context.SaveChanges();
 
                     // Checks if the player wants to play again.
-
-                    Console.WriteLine();
-
                     user = EndMenu(user, context);
 
                     Console.WriteLine("Loading, please wait...");
@@ -58,7 +33,7 @@ namespace ShuffleDeckOfCards
                 }
             }
 
-            static User UserMenu(UserContext context)
+            static User LogInMenu(UserContext context)
             {
                 Console.Clear();
                 Console.WriteLine("Welcome to 21!");
@@ -117,7 +92,7 @@ namespace ShuffleDeckOfCards
             {
                 while(true)
                 {
-                    Console.WriteLine("What do you want to do?");
+                    Console.WriteLine("What would you like to do?");
                     Console.WriteLine("1. Play again");
                     Console.WriteLine("2. Check player stats");
                     Console.WriteLine("3. Switch profile");
@@ -136,7 +111,7 @@ namespace ShuffleDeckOfCards
                         }
                         else if (check == 3)
                         {
-                            user = UserMenu(context);
+                            user = LogInMenu(context);
                             return user;
                         }
                         else if (check == 4)

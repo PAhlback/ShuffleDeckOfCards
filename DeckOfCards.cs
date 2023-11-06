@@ -9,7 +9,8 @@ namespace ShuffleDeckOfCards
 {
     internal class DeckOfCards
     {
-        public List<Card> Deck = new List<Card>();
+        public List<Card> UnshuffledDeck = new List<Card>();
+        public Stack<Card> Deck = new Stack<Card>();
         public DeckOfCards() 
         {
             string name = string.Empty;
@@ -21,7 +22,7 @@ namespace ShuffleDeckOfCards
                 else { j = i; }
                 name = Card.GetName(i);
                 Card c = new Card("Hearts", j, name);
-                Deck.Add(c);
+                UnshuffledDeck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
@@ -30,7 +31,7 @@ namespace ShuffleDeckOfCards
                 else { j = i; }
                 name = Card.GetName(i);
                 Card c = new Card("Diamonds", j, name);
-                Deck.Add(c);
+                UnshuffledDeck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
@@ -39,7 +40,7 @@ namespace ShuffleDeckOfCards
                 else { j = i; }
                 name = Card.GetName(i);
                 Card c = new Card("Spades", j, name);
-                Deck.Add(c);
+                UnshuffledDeck.Add(c);
             }
             for (int i = 2; i <= 14; i++)
             {
@@ -48,7 +49,17 @@ namespace ShuffleDeckOfCards
                 else { j = i; }
                 name = Card.GetName(i);
                 Card c = new Card("Clubs", j, name);
-                Deck.Add(c);
+                UnshuffledDeck.Add(c);
+            }
+
+            // Shuffles the cards using the Fisher-Yates shuffle algorithm
+            Shuffle.ShuffleMethod(UnshuffledDeck);
+
+            // Moves the shuffled cards from the DeckOfCards list to a Stack.
+            Deck = new Stack<Card>();
+            for (int i = 0; i < UnshuffledDeck.Count(); i++)
+            {
+                Deck.Push(UnshuffledDeck[i]);
             }
         }
 
