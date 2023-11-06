@@ -12,11 +12,9 @@ namespace ShuffleDeckOfCards
             using (UserContext context = new UserContext())
             {
                 User user = UserMenu(context);
-                Console.WriteLine($"Hello, {user.Name}!");
-                Console.WriteLine("Please wait...");
-                Thread.Sleep(750);
-                Console.Clear();
 
+                StartMenu(user);
+                
                 // Everything is contained in this while loop, since this makes it easy to check if the player wants to play
                 // again, or quit. Also generates a new deck of cards for each game.
                 while (true)
@@ -26,7 +24,7 @@ namespace ShuffleDeckOfCards
 
                     ////----------------------------
                     //// Code for testing
-                    //foreach(Card card in cardDeck.Deck)
+                    //foreach (Card card in cardDeck.Deck)
                     //{
                     //    Console.WriteLine($"{card.Name} {card.Color} {card.Number}");
                     //}
@@ -87,7 +85,32 @@ namespace ShuffleDeckOfCards
                 }
 
                 int menuChoice = Convert.ToInt32(input) - 1;
+                Console.Clear();
                 return users[menuChoice];
+            }
+
+            static void StartMenu(User user)
+            {
+                while (true)
+                {
+                    Console.WriteLine($"Hello, {user.Name}!");
+                    Console.WriteLine("1. Play the game");
+                    Console.WriteLine("2. Check stats");
+                    Console.WriteLine("3. Quit");
+                    int input = int.Parse(Console.ReadLine());
+                    if (input == 1)
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    else if (input == 2) user.PrintStats();
+                    else if (input == 3)
+                    {
+                        Console.WriteLine("Good bye!");
+                        Thread.Sleep(500);
+                        Environment.Exit(0);
+                    }
+                }
             }
 
             static User EndMenu(User user, UserContext context)
@@ -108,13 +131,7 @@ namespace ShuffleDeckOfCards
                         }
                         else if (check == 2) 
                         {
-                            Console.WriteLine($"{user.Name}");
-                            Console.WriteLine($"Wins: {user.Wins}");
-                            Console.WriteLine($"Losses: {user.Losses}");
-                            Console.WriteLine($"Draws: {user.Draws}");
-                            Console.WriteLine("Press enter to go back to menu");
-                            Console.ReadLine();
-                            Console.Clear();
+                            user.PrintStats();
                             break;                           
                         }
                         else if (check == 3)
@@ -130,9 +147,9 @@ namespace ShuffleDeckOfCards
                         }
                         else
                         {
-                            Console.WriteLine("Only enter 1, 2, or 3");
+                            Console.WriteLine("Only enter 1, 2, 3 or 4");
                             Console.WriteLine("Please wait...");
-                            Thread.Sleep(250);
+                            Thread.Sleep(500);
                         }
                     }
                 }

@@ -22,17 +22,8 @@ namespace ShuffleDeckOfCards
 
         public static string GetName(int number)
         {
-            string name = string.Empty;
-            if (number > 10)
-            {
-                HighCards myEnum = (HighCards)number;
-                name = myEnum.ToString();
-            }
-            else
-            {
-                name = number.ToString();
-            }
-            return name;
+            HighCards myEnum = (HighCards)number;
+            return (number > 10) ? myEnum.ToString() : number.ToString();
         }
         enum HighCards
         {

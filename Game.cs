@@ -101,7 +101,7 @@ namespace ShuffleDeckOfCards
                 }
                 else if (cpu.Total == player.Total)
                 {
-                    Console.WriteLine("DRAW! Computer wins ;)");
+                    Console.WriteLine("It's a draw!");
                     PrintFinalScores(player.Total, cpu.Total);
                     user.Draws++;
                     return true;
